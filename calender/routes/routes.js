@@ -1,4 +1,5 @@
 export const routes={
    calender:"calender",
-   FullCalender:"FullCalender"
+   FullCalender:"FullCalender",
+   EventsDisplay:"EventsDisplay"
 }

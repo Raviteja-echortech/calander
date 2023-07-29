@@ -5,12 +5,18 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-
+import Weeks from "../assets/svg/Weeks.svg";
+import Vector  from "../assets/svg/Vector.svg";
+import Events from "../assets/svg/Events.svg"
+import Days from "../assets/svg/Days.svg";
+import { Publicholidays } from './PublicHolidays';
 const Calender = props => {
   const[isCollapsed,setIsCollapsed]=useState(true)
- // const[NextMonth,setNextMonth]=useState(0)
+  const[Check,setCheck]=useState( new Date().getDate())
+  const[getBack,setGetBack]=useState(0)
   const  Num=props?.route?.params?.el?.incrementNum
   const date = new Date();
   const month = Num? date.getMonth()+Num: date.getMonth(); //add  here
@@ -21,18 +27,28 @@ const Calender = props => {
   const months = { 0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'Apr', 4: 'May', 5: 'Jun', 6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Oct', 10: 'Nov', 11: 'Dec',};
   const numberDays = new Date(date.getFullYear(),Num?date.getMonth()+1+Num:date.getMonth()+1, 0,).getDate(); //add here default 1 and add 1 from there
   const box = [];
-  const filledBox = Array(numberDays)
-    .fill('')
-    .map((_, i) => box.push(i));
-  const EmptySpace = Array(firstDayOfMonth.getDay()).fill('');
-  const handleDate = i => {
-    console.log(i);
-  };
-  EmptySpace.push(...filledBox);
-  const GoToDay=()=>{
-    
+  for(let i=1;i<=numberDays;i++){
+      box .push({noofDays:i,weekNum:firstDayOfMonth.getDate()})
   }
+  const EmptySpace = Array(firstDayOfMonth.getDay()).fill('');
+  const handleDate = (i)=> {
+      setCheck(i)
+  };
+  EmptySpace.push(...box);
+  const GoToDay=()=>{
+
+    setCheck(day)
+  }
+  // console.log(new Date(date.getFullYear(),Num?date.getMonth()+1+Num:date.getMonth()+1, 0,).getDate())
+  //  console.log(EmptySpace)
+  
+   {/* <Text>{new Date(year, month,1).toDateString()}</Text> */}
+      {/* <Text>{date.getMonth()}</Text> */}
+      {/* <TouchableOpacity onPress={()=>setNextMonth(NextMonth+1)} >
+        <Text>Next Month</Text>
+      </TouchableOpacity> */}
   return (
+  
     <View style={styles.container}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <TouchableOpacity
@@ -45,29 +61,31 @@ const Calender = props => {
         <TouchableOpacity 
         onPress={()=>setIsCollapsed(!isCollapsed)}
           style={styles.showEvents}>
-          <Text style={{color: 'white'}}>Show Events</Text>
+         <Vector/>
         </TouchableOpacity>
       </View>
       
+      {/* collapsible */}
       <Collapsible collapsed={isCollapsed}>
-        <View style={styles.collabsable} >
-     
-      <Text style={{color:"red"}}  >Month</Text>
-      
-      <Text style={{color:"blue"}}  >Week</Text>
-     
-      <Text style={{color:"green"}}  >Day</Text>
-      
-      <Text style={{color:"red"}}  >Events</Text>
-    
-        </View>
-        
+      <View style={styles.collabsable} >
+     <TouchableOpacity activeOpacity={0.7} >
+      <Vector/>
+      <Text>Month</Text>
+     </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.7}  >
+        <Weeks/>
+        <Text>Week</Text>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.7}  >
+         <Days/>
+        <Text>Day</Text>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.7}  >
+        <Events/> 
+       <Text>Events</Text>
+      </TouchableOpacity>
+        </View> 
       </Collapsible>
-      {/* <Text>{new Date(year, month,1).toDateString()}</Text> */}
-      {/* <Text>{date.getMonth()}</Text> */}
-      {/* <TouchableOpacity onPress={()=>setNextMonth(NextMonth+1)} >
-        <Text>Next Month</Text>
-      </TouchableOpacity> */}
       <View style={styles.calenderMonthly}>
         <View style={styles.datesBox}>
           <ScrollView
@@ -87,19 +105,19 @@ const Calender = props => {
                 <View key={i}>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => handleDate(el)}
+                    onPress={() => handleDate(el.noofDays)}
                     style={[
                       styles.requriedTxt,
                       {
                         marginLeft: 20,
-                        borderWidth: el === '' ? 0 : 0.5,
-                        backgroundColor:months[date.getMonth()] === months[month] &&day === el  ? 'blue' : 'white',}]}>
+                        borderWidth: el.noofDays  === '' ? 0 : Check===el.noofDays ?0.5:0,
+                        backgroundColor:months[date.getMonth()] === months[month] &&day ===el.noofDays && Check===el.noofDays  ? 'blue' : 'white',}]}>
                     <Text
                       style={{
-                        color:months[date.getMonth()] === months[month] &&day === el  ? 'white'  : 'black',
+                        color:months[date.getMonth()] === months[month] &&day === el.noofDays &&Check===el.noofDays ? 'white'  :day === el.noofDays &&months[date.getMonth()] === months[month]?"blue": "black",
                         fontSize: 14,
                       }}>
-                      {el}
+                      {el.noofDays }
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -108,7 +126,7 @@ const Calender = props => {
           </ScrollView>
         </View>
       </View>
-      { months[date.getMonth()] === months[month]?null:
+      { months[date.getMonth()] === months[month]&&Check===day?null:
        <TouchableOpacity
        onPress={GoToDay}
        activeOpacity={0.7}
@@ -117,17 +135,30 @@ const Calender = props => {
           <Text style={{color:"black",fontSize:16,fontFamily:"Roboto-Bold"}} >{day}</Text>
         </View>
       </TouchableOpacity>}
-      <View>
+      <ScrollView contentContainerStyle={{flexDirection:"row",marginLeft:20}} >
         {/* list Events here */}
-      </View>
+        {  Publicholidays.map((el,i)=>{
+          return(
+            <View key={i}>
+              <View>{months[month]===el.eventMonth?el.events.map((el,i)=>{
+                return(
+                  <View key={i}>
+                    <Text >{}{el.date==0?"":el.date}{"-------->"}{el.des}</Text>
+                  </View>    
+                )
+              }):<Text>{""}</Text>}</View>
+            </View>
+          )
+        })}
+      </ScrollView>
     </View>
   );
 };
 export default Calender;
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    height:"100%",
+    width:"100%",
     backgroundColor: 'white',
   },
   TxtStyles: {
@@ -182,6 +213,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 12,
     justifyContent: 'center',
+    borderColor:"grey",
     marginTop: 35,
     alignItems: 'center',
   },
@@ -217,7 +249,6 @@ const styles = StyleSheet.create({
   showEvents:{
     marginRight: 30,
     marginTop: 10,
-    backgroundColor: 'red',
     padding: 10,
   }
 });

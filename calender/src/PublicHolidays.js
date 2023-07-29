@@ -6,6 +6,10 @@ export const Publicholidays=
         {
          date:26,
          des:"Republic Day",
+        },
+        {
+          date:30,
+          des:"Gandhi Death Date"
         }
       ]
     },
@@ -75,7 +79,7 @@ export const Publicholidays=
       events:[
         {
          date:15,
-         des:"Independence",
+         des:" Aug 15  Independence",
         }
       ]
     },

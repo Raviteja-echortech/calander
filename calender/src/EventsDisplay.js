@@ -1,6 +1,8 @@
 import React from "react"
 import {View,StyleSheet} from "react-native"
-const EventsDisplay=()=>{
+
+const EventsDisplay=(props)=>{
+    console.log(props?.route?.params?.sortName)
     return(
    <View>
 
@@ -9,5 +11,5 @@ const EventsDisplay=()=>{
 }
 export default EventsDisplay
 const Styles=StyleSheet.create({
-    
+
 })

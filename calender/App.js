@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import Calender from "./src/Calender"
 import FullyearCalender from "./src/FullyearCalender"
 import { routes } from "./routes/routes"
+import EventsDisplay from "./src/EventsDisplay"
 const App=()=>{
   const Stack=createNativeStackNavigator()
   const config = { animation: 'slide_from_right' }
@@ -18,7 +19,8 @@ const App=()=>{
       }} 
     >
       <Stack.Screen name={routes.calender} component={Calender}  options={config} />
-     <Stack.Screen name={routes.FullCalender} component={FullyearCalender} options={config} />
+      <Stack.Screen name={routes.FullCalender} component={FullyearCalender} options={config} />
+      <Stack.Screen name={routes.EventsDisplay} component={EventsDisplay} options={config} />
       </Stack.Navigator>
    </NavigationContainer>
    )

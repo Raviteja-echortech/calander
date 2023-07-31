@@ -21,14 +21,13 @@ import EventsSelected from "../assets/svg/EventsSelected.svg"
 import {Publicholidays} from './PublicHolidays';
 import { eventsArrange, routes } from '../routes/routes';
 import Plus  from "../assets/svg/Plus.svg"
-import { useIsFocused } from '@react-navigation/native';
+
 const Calender = props => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [Check, setCheck] = useState(new Date().getDate());
   const[select,setSelected]=useState("Month")
   const Num = props?.route?.params?.el?.incrementNum;
   const date = new Date();
-  const isFocused=useIsFocused()
   const month = Num ? date.getMonth() + Num : date.getMonth(); //add  here
   const day = date.getDate();
   const year = date.getFullYear(); //add here for year change
@@ -61,6 +60,7 @@ const Calender = props => {
   const handleDate = i => {
     setCheck(i);
   };
+
   emptySpace.push(...box);
   const GoToDay = () => {
     setCheck(day);
@@ -68,25 +68,9 @@ const Calender = props => {
   };
   const eventFun=(el)=>{
     setSelected(el)
-   
+
   }
-  useEffect(()=>{
-    
-  },[isFocused])
- //console.log(new Date(date.getFullYear(),Num?date.getMonth()+1+Num:date.getMonth()+1, 0,).getDate())
-//  console.log(emptySpace)
-    //console.log(firstDayOfMonth.getDay())
-  {
-    /* <Text>{new Date(year, month,1).toDateString()}</Text> */
-  }
-  {
-    /* <Text>{date.getMonth()}</Text> */
-  }
-  {
-    /* <TouchableOpacity onPress={()=>setNextMonth(NextMonth+1)} >
-        <Text>Next Month</Text>
-      </TouchableOpacity> */
-  }
+
  
   const eventsofDay = [
     {

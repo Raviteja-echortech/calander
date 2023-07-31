@@ -24,7 +24,7 @@ const FullyearCalender = props => {
               key={i}
               style={styles.MonthBtn}>
               <Text style={{fontSize: 17, color: 'blue'}}>{el.monthName}</Text>
-             {toDaydate===el.monthName?<Text style={styles.Ground}>{new Date().toDateString()}</Text>:null} 
+             {toDaydate===el.monthName?<Text style={styles.Ground}>{new Date().toDateString().slice(8,16)}</Text>:null} 
             </TouchableOpacity>
           );
         })}

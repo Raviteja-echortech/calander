@@ -17,6 +17,11 @@ export const Publicholidays=
     {
       eventMonth:"Feb",
       events:[
+        
+        {
+          date:14,
+          des:"Valentine's Day"
+         },
         {
          date:18,
          des:"Shivaratri",
@@ -24,7 +29,7 @@ export const Publicholidays=
         {
          date:28,
          des:"National Science Day"
-        },
+        }
 
       ]
     },
@@ -129,53 +134,71 @@ export const Publicholidays=
 
 
 ]
+
+export const  months = {
+  0: 'Jan',
+  1: 'Feb',
+  2: 'Mar',
+  3: 'Apr',
+  4: 'May',
+  5: 'Jun',
+  6: 'Jul',
+  7: 'Aug',
+  8: 'Sep',
+  9: 'Oct',
+  10: 'Nov',
+  11: 'Dec',
+};
+
+
 export const monthsNames=[
     {
       monthName:"Jan",
-      incrementNum:-6,
+      incrementNum:-7,
     },
     {
       monthName:"Feb",
-      incrementNum:-5,
+      incrementNum:-6,
     },
     {
       monthName:"Mar",
-      incrementNum:-4,
+      incrementNum:-5,
     },
     {
       monthName:"Apr",
-      incrementNum:-3,
+      incrementNum:-4,
     },
     {
       monthName:"May",
-      incrementNum:-2,
+      incrementNum:-3,
     },
     {
       monthName:"Jun",
-      incrementNum:-1,
+      incrementNum:-2,
     },
     {
       monthName:"Jul",
-      incrementNum:0,
+      incrementNum:-1,
     },
     {
       monthName:"Aug",
-      incrementNum:1,
+      incrementNum:0,
     },
     {
       monthName:"Sep",
-      incrementNum:2,
+      incrementNum:1,
     },
     {
       monthName:"Oct",
-      incrementNum:3,
+      incrementNum:2,
     },
     {
       monthName:"Nov",
-      incrementNum:4,
+      incrementNum:3,
     },
     {
       monthName:"Dec",
-      incrementNum:5,
+      incrementNum:4,
     },
   ]
+

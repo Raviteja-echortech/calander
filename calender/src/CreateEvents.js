@@ -137,7 +137,7 @@ const CreateEvents = props => {
             />
           </View>
           <View style={styles.thisMontsData}>
-            <Text style={styles.thisMonthTxt}  >This Month</Text>
+            <Text style={styles.thisMonthTxt}>This Month</Text>
             <Switch
               trackColor={{false: '#767577', true: '#81b0ff'}}
               thumbColor={ userEvents.thisMonth ? '#f5dd4b' : '#f4f3f4'}

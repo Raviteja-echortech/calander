@@ -30,7 +30,6 @@ const Calender = props => {
   const [Check, setCheck] = useState(new Date().getDate());
   const [select, setSelected] = useState('Month');
   const [Data, setData] = useState([]);
-  const [weekly, setWeekly] = useState();
   const Num = props?.route?.params?.el?.incrementNum;
   const date = new Date();
   const month = Num ? date.getMonth() + Num : date.getMonth(); //add  here
@@ -39,11 +38,7 @@ const Calender = props => {
   const isFocused = useIsFocused();
   const firstDayOfMonth = new Date(year, month, 1);
   const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const numberDays = new Date(
-    date.getFullYear(),
-    Num ? date.getMonth() + 1 + Num : date.getMonth() + 1,
-    0,
-  ).getDate(); //add here default 1 and add 1 from there
+  const numberDays = new Date(date.getFullYear(),Num ? date.getMonth() + 1 + Num : date.getMonth() + 1,0,).getDate(); //add here default 1 and add 1 from there
   const box = [];
   for (let i = 1; i <= numberDays; i++) {
     box.push({noofDays: i, weekNum: new Date(year, month, i).getDay()});
@@ -62,7 +57,7 @@ const Calender = props => {
     };
     getData();
   }, [isFocused]);
-  //console.log(Data);
+  console.log(Data);
   emptySpace.push(...box);
 
   const GoToDay = () => {
@@ -74,10 +69,7 @@ const Calender = props => {
     setIsCollapsed(!isCollapsed);
   };
   const movetoEvents = () => {
-    props.navigation.navigate(routes.CreateEvents, {
-      datenow: Check,
-      monthNum: month,
-    });
+    props.navigation.navigate(routes.CreateEvents, {datenow: Check,monthNum: month,});
   };
 
   const eventsofDay = [
@@ -188,7 +180,7 @@ const Calender = props => {
                                   : el.weekNum == 0 || el.weekNum == 6
                                   ? 'red'
                                   : 'black',
-                              fontSize: 16,
+                                 fontSize: 16,
                             }}>
                             {el.noofDays}
                           </Text>
@@ -219,23 +211,10 @@ const Calender = props => {
                   ? el.events.map((el, i) => {
                       return (
                         <View key={i} style={styles.eventCards}>
-                          <Text style={styles.eventText}>
-                            {el.date === Check
-                              ? el.date
-                              : el.date !== Check
-                              ? ''
-                              : ''}
-                            {el.date === Check
-                              ? '------->'
-                              : el.date !== Check
-                              ? ''
-                              : ''}
-                            {el.date === Check
-                              ? el.des
-                              : el.date !== Check
-                              ? ''
-                              : 'No events in this On this Day'}
-                          </Text>
+                          <View style={{flexDirection:"row"}} >
+                            {el.date === Check? <Text  style={styles.eventText}>{ el.date}</Text>: el.date !== Check? <Text>{''}</Text>: <Text>{''}</Text>}
+                            {el.date === Check? <Text style={styles.eventText}>{el.des}</Text>: el.date !== Check? <Text>{''}</Text>: <Text style={styles.eventText} >{'No events in this On this Day'}</Text>}
+                          </View>
                         </View>
                       );
                     })
@@ -256,12 +235,14 @@ const Calender = props => {
                     ? el.events.map((el, i) => {
                         return (
                           <View key={i} style={styles.eventCards1}>
-                            <Text style={styles.eventText}>
-                              {el.date == 0
+                           {el.date == 0
                                 ? 'No events Inthis month'
-                                : el.date}
-                              {'-------->'} {el.des}
-                            </Text>
+                                : 
+                               <View style={styles.eventBox} >
+                                <Text style={styles.eventText}>{el.date}{''}</Text>
+                                <Text style={styles.eventText} >{el.des}</Text>             
+                              </View>
+                              }
                           </View>
                         );
                       })
@@ -271,22 +252,26 @@ const Calender = props => {
             })}
           </View>
           <Text style={styles.headingTxt}>User Events</Text>
-          <ScrollView contentContainerStyle={styles.userEvents} >
-            <View >
+          <ScrollView contentContainerStyle={styles.userEvents}>
+            <View>
               {/* user Events */}
               {Data?.map((el, i) => {
                 return (
                   <View key={i}>
-                    {months[el.month] === months[month] ? (
-                      <View style={{margin:20}} >
-                        <View style={{flexDirection: 'row'}}>
-                          <Text>{el.date}</Text>
-                          <Text style={{marginLeft: 20}}>{el.event}</Text>
+                    {months[el.month]===months[month]? (
+                      <View style={{margin: 20}}>
+                        <View style={styles.eventBox}>
+                          <Text style={styles.dateTxt}>{el.date}</Text>
+                          <Text style={styles.eventTxt}>{el.event}</Text>
                         </View>
-                        <Text>{months[el.month]}</Text>
-                        <Text>{el.description}</Text>
+                        <View style={{margin: 20}}>
+                          <Text style={styles.descriptonTxt}>Description</Text>
+                          <Text style={styles.eventsAll}>
+                            {el.description}
+                          </Text>
+                        </View>
                       </View>
-                    ) : null}
+                    ) : (null)}
                   </View>
                 );
               })}
@@ -319,6 +304,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+
   mainConatiner: {
     width: '100%',
     backgroundColor: 'white',
@@ -364,7 +350,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     width: '98%',
-    height: '75%',
+    height: '80%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -406,6 +392,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     backgroundColor: '#5987f2',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 10,
   },
   collabsable: {
     flexDirection: 'row',
@@ -435,7 +429,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
-    elevation: 5,
     position: 'absolute',
     bottom: 20,
     right: 20,
@@ -464,8 +457,9 @@ const styles = StyleSheet.create({
   eventText: {
     color: 'black',
     marginTop: 20,
-    fontFamily: 'Roboto-Bold',
-    fontSize: 16,
+    fontFamily: 'Roboto-Italic',
+    fontSize: 18,
+    marginRight:20
   },
 
   singleDay: {
@@ -496,8 +490,8 @@ const styles = StyleSheet.create({
     height: '40%',
     width: '99%',
     backgroundColor: 'white',
-    borderWidth:0.5,
-   borderColor:"#ffef00",
+    borderWidth: 0.5,
+    borderColor: '#ffef00',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -519,11 +513,11 @@ const styles = StyleSheet.create({
   userEvents: {
     height: '95%',
     width: '98%',
-   alignSelf:"center",
-   borderWidth:0.5,
-   borderColor:"#ffef00",
-   borderRadius:10,
-    backgroundColor:"white",
+    alignSelf: 'center',
+    borderWidth: 0.5,
+    borderColor: '#ffef00',
+    borderRadius: 10,
+    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -532,6 +526,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.17,
     shadowRadius: 2.84,
     elevation: 4,
-    
   },
+  dateTxt: {
+    color: 'black',
+    fontSize: 17,
+    marginLeft: 10,
+  },
+  eventTxt: {
+    marginLeft: 20,
+    color: 'black',
+    fontSize: 17,
+    marginLeft: 10,
+  },
+  descriptonTxt: {
+    color: 'black',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  noEventsBox: {
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+  },
+  noEventsTxt: {
+    alignSelf: 'center',
+    color: 'black',
+    fontSize: 20,
+    fontFamily: 'Roboto-Italic',
+  },
+   eventsAll:{
+    color: '#999999',
+    fontSize: 15,
+    fontFamily: 'Roboto-Italic',
+   },
+   eventBox:{
+    flexDirection:"row"
+   }
 });

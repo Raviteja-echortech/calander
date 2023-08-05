@@ -21,7 +21,7 @@ function Dates({year, month, check}) {
  for(let i=0;i<weekDates.length;i++){
     weekDates[i].getDate()
   }
-  console.log(eventChange)
+ // console.log(eventChange)
   return (
     <View>
       <View style={styles.weekDays}>
@@ -40,9 +40,9 @@ function Dates({year, month, check}) {
             onPress={()=>setEvent(date.getDate())}
             style={[
               styles.weeks,
-              {backgroundColor: eventChange === date.getDate() ? '#F6C700' : 'white'},
+              {backgroundColor: eventChange === date.getDate() ? '#5987f2' : 'white'},
             ]}>
-            <Text style={styles.TxtArr}>{date.getDate()}</Text>
+            <Text style={[styles.TxtArr,{color:eventChange === date.getDate()?"white":"black"}]}>{date.getDate()}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -55,7 +55,7 @@ function Dates({year, month, check}) {
                       return (
                         <View key={i} style={styles.eventCards}>
                           <Text style={styles.eventText}>
-                       {el.date=== eventChange ?el.des:el.date!==check?"NoEvents on This Day":""}
+                          {el.date=== eventChange ?el.des:el.date!==check?"NoEvents on This Day":""}
                           </Text>
                         </View>
                       );
@@ -72,8 +72,8 @@ function Dates({year, month, check}) {
 export default Dates;
 const styles = StyleSheet.create({
   weeks: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
@@ -91,8 +91,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   TxtArr: {
-    color: 'black',
-    fontFamily: 'Roboto-Bold',
+    fontSize:20,
   },
   weekDays: {
     flexDirection: 'row',

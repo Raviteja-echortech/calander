@@ -202,7 +202,7 @@ const Calender = props => {
       ) : select === eventsArrange.Day ? (
         <View style={styles.Weeks}>
           <View style={styles.singleDay}>
-            <Text style={styles.dayTxt}>{Check}</Text>
+            <Text style={styles.dayTxt}>{months[month]===months[1]&&Check>=30&&date.getFullYear()%4==0?28:months[month]===months[1]&&Check>=30&&date.getFullYear()%4!==0?28:months[month]===months[3]||months[month]===months[5]||months[month]===months[10]||months[month]===months[8]&&Check==31?30:Check}</Text>
           </View>
           {Publicholidays.map((el, i) => {
             return (

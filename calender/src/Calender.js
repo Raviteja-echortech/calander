@@ -15,24 +15,28 @@ import Options from '../assets/svg/Options.svg';
 import Months from '../assets/svg/Months.svg';
 import MonthsSelected from '../assets/svg/MonthsSelected.svg';
 import DaysSelected from '../assets/svg/DaysSelected.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import WeeksSelected from '../assets/svg/WeeksSelected.svg';
 import EventsSelected from '../assets/svg/EventsSelected.svg';
 import {Publicholidays, months} from './PublicHolidays';
 import {eventsArrange, routes} from '../routes/routes';
 import Plus from '../assets/svg/Plus.svg';
 import Dates from './WeeklyDays';
+import {useIsFocused} from '@react-navigation/native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Calender = props => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [Check, setCheck] = useState(new Date().getDate());
   const [select, setSelected] = useState('Month');
+  const [Data, setData] = useState([]);
   const [weekly, setWeekly] = useState();
   const Num = props?.route?.params?.el?.incrementNum;
   const date = new Date();
   const month = Num ? date.getMonth() + Num : date.getMonth(); //add  here
   const day = date.getDate();
   const year = date.getFullYear(); //add here for year change
+  const isFocused = useIsFocused();
   const firstDayOfMonth = new Date(year, month, 1);
   const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const numberDays = new Date(
@@ -51,8 +55,14 @@ const Calender = props => {
   };
 
   useEffect(() => {
-    //StoreData()
-  }, []);
+    const getData = async () => {
+      let res = await AsyncStorage.getItem('eventOfDay');
+      res = JSON.parse(res);
+      setData(res);
+    };
+    getData();
+  }, [isFocused]);
+  //console.log(Data);
   emptySpace.push(...box);
 
   const GoToDay = () => {
@@ -61,7 +71,7 @@ const Calender = props => {
   };
   const eventFun = el => {
     setSelected(el);
-    setIsCollapsed(!isCollapsed)
+    setIsCollapsed(!isCollapsed);
   };
   const movetoEvents = () => {
     props.navigation.navigate(routes.CreateEvents, {
@@ -72,13 +82,13 @@ const Calender = props => {
 
   const eventsofDay = [
     {
-      vectorImage: <Months />,
-      selected: <MonthsSelected />,
+      vectorImage: <Months marginLeft={10} />,
+      selected: <MonthsSelected marginLeft={10} />,
       monthSort: 'Month',
     },
     {
-      vectorImage: <Weeks />,
-      selected: <WeeksSelected />,
+      vectorImage: <Weeks marginLeft={10} />,
+      selected: <WeeksSelected marginLeft={10} />,
       monthSort: 'Week',
     },
     {
@@ -87,8 +97,8 @@ const Calender = props => {
       monthSort: 'Day',
     },
     {
-      vectorImage: <Events />,
-      selected: <EventsSelected />,
+      vectorImage: <Events marginLeft={10} />,
+      selected: <EventsSelected marginLeft={10} />,
       monthSort: 'Events',
     },
   ];
@@ -160,13 +170,13 @@ const Calender = props => {
                                 months[date.getMonth()] === months[month] &&
                                 day === el.noofDays &&
                                 Check === el.noofDays
-                                  ? 'blue'
+                                  ? '#5987f2'
                                   : 'white',
                             },
                           ]}>
                           <Text
                             style={{
-                              fontFamily: 'Roboto-Bold',
+                              fontFamily: 'Roboto-Regular',
                               color:
                                 months[date.getMonth()] === months[month] &&
                                 day === el.noofDays &&
@@ -178,7 +188,7 @@ const Calender = props => {
                                   : el.weekNum == 0 || el.weekNum == 6
                                   ? 'red'
                                   : 'black',
-                              fontSize: 14,
+                              fontSize: 16,
                             }}>
                             {el.noofDays}
                           </Text>
@@ -204,13 +214,27 @@ const Calender = props => {
           </View>
           {Publicholidays.map((el, i) => {
             return (
-              <View key={i} style={{marginTop: 5}}>
+              <View key={i} style={{marginTop: 10}}>
                 {months[month] === el.eventMonth
                   ? el.events.map((el, i) => {
                       return (
                         <View key={i} style={styles.eventCards}>
                           <Text style={styles.eventText}>
-                            {el.date == Check ? el.des : "No events in this On this Day"}
+                            {el.date === Check
+                              ? el.date
+                              : el.date !== Check
+                              ? ''
+                              : ''}
+                            {el.date === Check
+                              ? '------->'
+                              : el.date !== Check
+                              ? ''
+                              : ''}
+                            {el.date === Check
+                              ? el.des
+                              : el.date !== Check
+                              ? ''
+                              : 'No events in this On this Day'}
                           </Text>
                         </View>
                       );
@@ -221,25 +245,53 @@ const Calender = props => {
           })}
         </View>
       ) : select === eventsArrange.Events ? (
-        <View style={styles.Weeks}>
-          {Publicholidays.map((el, i) => {
-            return (
-              <View key={i} style={{marginTop: 5}}>
-                {months[month] === el.eventMonth
-                  ? el.events.map((el, i) => {
-                      return (
-                        <View key={i} style={styles.eventCards}>
-                          <Text style={styles.eventText}>
-                            {el.date == 0 ? 'No events Inthis month' : el.date}{' '}
-                            {'-------->'} {el.des}
-                          </Text>
+        <View style={styles.eventsRequried}>
+          <View style={styles.eventarr}>
+            {/* publicholidays */}
+            <Text style={styles.headingTxt}>Publicholidays</Text>
+            {Publicholidays.map((el, i) => {
+              return (
+                <View key={i} style={{marginLeft: 20}}>
+                  {months[month] === el.eventMonth
+                    ? el.events.map((el, i) => {
+                        return (
+                          <View key={i} style={styles.eventCards1}>
+                            <Text style={styles.eventText}>
+                              {el.date == 0
+                                ? 'No events Inthis month'
+                                : el.date}
+                              {'-------->'} {el.des}
+                            </Text>
+                          </View>
+                        );
+                      })
+                    : null}
+                </View>
+              );
+            })}
+          </View>
+          <Text style={styles.headingTxt}>User Events</Text>
+          <ScrollView contentContainerStyle={styles.userEvents} >
+            <View >
+              {/* user Events */}
+              {Data?.map((el, i) => {
+                return (
+                  <View key={i}>
+                    {months[el.month] === months[month] ? (
+                      <View style={{margin:20}} >
+                        <View style={{flexDirection: 'row'}}>
+                          <Text>{el.date}</Text>
+                          <Text style={{marginLeft: 20}}>{el.event}</Text>
                         </View>
-                      );
-                    })
-                  : null}
-              </View>
-            );
-          })}
+                        <Text>{months[el.month]}</Text>
+                        <Text>{el.description}</Text>
+                      </View>
+                    ) : null}
+                  </View>
+                );
+              })}
+            </View>
+          </ScrollView>
         </View>
       ) : null}
       <View style={{flexDirection: 'row'}}>
@@ -311,7 +363,7 @@ const styles = StyleSheet.create({
     marginTop: '20%',
     backgroundColor: 'white',
     borderRadius: 10,
-    width: '90%',
+    width: '98%',
     height: '75%',
     shadowColor: '#000',
     shadowOffset: {
@@ -324,12 +376,12 @@ const styles = StyleSheet.create({
     borderColor: 'yellow',
   },
   requriedTxt: {
-    width: 25,
-    height: 25,
-    borderRadius: 12,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     justifyContent: 'center',
     borderColor: 'grey',
-    marginTop: 25,
+    marginTop: 30,
     alignItems: 'center',
   },
 
@@ -357,7 +409,7 @@ const styles = StyleSheet.create({
   },
   collabsable: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   showEvents: {
     marginRight: 30,
@@ -366,7 +418,13 @@ const styles = StyleSheet.create({
   },
   eventCards: {
     width: Dimensions.get('window').width * 0.9,
+    //height:Dimensions.get('window').height*0.7,
     marginLeft: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eventCards1: {
+    width: Dimensions.get('window').width * 0.9,
   },
   plusSymbol: {
     shadowColor: '#000',
@@ -405,6 +463,7 @@ const styles = StyleSheet.create({
   },
   eventText: {
     color: 'black',
+    marginTop: 20,
     fontFamily: 'Roboto-Bold',
     fontSize: 16,
   },
@@ -424,7 +483,55 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
   },
   monthName: {
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Roboto-Italic',
     color: 'black',
+    alignSelf: 'center',
+  },
+  eventsRequried: {
+    backgroundColor: 'white',
+    width: '100%',
+    height: '85%',
+  },
+  eventarr: {
+    height: '40%',
+    width: '99%',
+    backgroundColor: 'white',
+    borderWidth:0.5,
+   borderColor:"#ffef00",
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    alignSelf: 'center',
+    borderRadius: 10,
+  },
+  headingTxt: {
+    fontSize: 20,
+    color: 'black',
+    marginLeft: 20,
+    marginTop: 10,
+  },
+
+  userEvents: {
+    height: '95%',
+    width: '98%',
+   alignSelf:"center",
+   borderWidth:0.5,
+   borderColor:"#ffef00",
+   borderRadius:10,
+    backgroundColor:"white",
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 2.84,
+    elevation: 4,
+    
   },
 });

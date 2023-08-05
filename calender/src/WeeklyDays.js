@@ -55,7 +55,7 @@ function Dates({year, month, check}) {
                       return (
                         <View key={i} style={styles.eventCards}>
                           <Text style={styles.eventText}>
-                       {el.date=== eventChange ?el.des:"No Events in This Day"}
+                       {el.date=== eventChange ?el.des:el.date!==check?"NoEvents on This Day":""}
                           </Text>
                         </View>
                       );

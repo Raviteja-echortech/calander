@@ -6,8 +6,8 @@ import {
   Switch,
   TextInput,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {months} from './PublicHolidays';
+import React, {useState} from 'react';
+//import {months} from './PublicHolidays';
 import TickMark from '../assets/svg/TickMark';
 import CrossMark from '../assets/svg/CrossMark';
 import {Calendar} from 'react-native-calendars';
@@ -26,15 +26,10 @@ const CreateEvents = props => {
     setUserEvents({...userEvents, [key]: text}); 
   };
 
-  useEffect(() => {
-    (async () => {
-      let res = await AsyncStorage.getItem('eventOfDay');
-      res = JSON.parse(res);
-    })();
-  }, []);
+ 
 
   const handleSubmit = async () => {
-    if (userEvents.event !== '') {
+    if (userEvents.event !== '') {  
       try {
         let res = await AsyncStorage.getItem('eventOfDay');
         res = JSON.parse(res) || [];
@@ -65,8 +60,6 @@ const CreateEvents = props => {
   };
    //const Day=new Date(new Date().getFullYear(),userEvents.month,userEvents.date).toDateString()
    //console.log(userEvents)
-
- 
   return (
     <View style={styles.container}>
       {/* event naming */}
@@ -86,7 +79,7 @@ const CreateEvents = props => {
       </View>
       <Text  style={styles.eventTxt}>Event</Text>
       <View style={styles.currentBox}>
-      <Text style={styles.currentDate}> currentDate:-{' '}{new Date(new Date().getFullYear(),userEvents.month,userEvents.date,).toDateString()}</Text>
+      <Text style={styles.currentDate}> {'currentDate:-'}{new Date(new Date().getFullYear(),userEvents.month,userEvents.date,).toDateString()}</Text>
       <TouchableOpacity onPress={()=>setVisible(!isVisible)} activeOpacity={0.7} >
       <Calender/>
       </TouchableOpacity>
@@ -102,7 +95,7 @@ const CreateEvents = props => {
       <Modal visible={isVisible} animationType="fade">
         <View style={styles.modalContainer}>
           <Calendar
-            style={{borderRadius: 10, elevation: 4, margin: 40}}
+            style={styles.calenderOreintation}
             onDayPress={date => {
               //console.log(date)
               setUserEvents({...userEvents,  month:date.month-1, date:date.day});
@@ -240,6 +233,9 @@ const styles = StyleSheet.create({
   },
   currentBox:{
     flexDirection:"row",justifyContent:"space-around",marginTop:20,marginBottom:10
+  },
+  calenderOreintation:{
+    borderRadius: 10, elevation: 4, margin: 40
   }
  
 });

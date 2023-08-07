@@ -55,7 +55,7 @@ function Dates({year, month, check}) {
                       return (
                         <View key={i} style={styles.eventCards}>
                           <Text style={styles.eventText}>
-                          {el.date=== eventChange ?el.des:el.date!==check?"NoEvents on This Day":""}
+                          {el.date=== eventChange ?el.des:el.date!==check?"NoEvents on This Day":"NoEvents on This Day"}
                           </Text>
                         </View>
                       );
@@ -95,12 +95,12 @@ const styles = StyleSheet.create({
   },
   weekDays: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     marginBottom: 20,
   },
   weeksArr: {
     color: 'black',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
   },
   eventText:{

@@ -1,20 +1,15 @@
 import {View, Text, TouchableOpacity,StyleSheet,ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {routes} from './../routes/routes';
 import {monthsNames} from './PublicHolidays';
 
 
 const FullyearCalender = props => {
-  const SelectingMonth = el => {
-   props?.navigation?.navigate(routes.calender,{el})
-  };
+  const SelectingMonth = el => {props?.navigation?.navigate(routes.calender,{el})};
   const toDaydate=new Date().toDateString().slice(4,7)
   return (
     <View>
-      <Text
-        style={styles.CalenderHeader}>
-        Calender
-      </Text>
+      <Text style={styles.CalenderHeader}> Calender</Text>
       <ScrollView contentContainerStyle={styles.MonthDisplayBoard}>
         {monthsNames.map((el, i) => {
           return (
@@ -24,7 +19,7 @@ const FullyearCalender = props => {
               key={i}
               style={styles.MonthBtn}>
               <Text style={{fontSize: 17, color: 'blue'}}>{el.monthName}</Text>
-             {toDaydate===el.monthName?<Text style={styles.Ground}>{new Date().toDateString().slice(8,16)}</Text>:null} 
+             {toDaydate===el.monthName?<Text style={styles.Ground} >{new Date().toDateString().slice(8,16)}</Text>:null}
             </TouchableOpacity>
           );
         })}

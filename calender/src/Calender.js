@@ -46,18 +46,25 @@ const Calender = props => {
   const emptySpace = Array(firstDayOfMonth.getDay()).fill('');
 
   const handleDate = i => {
-    setCheck(i.noofDays);
+    if(months[month]===months[3]||months[month]===months[5]||months[month]===months[10]||months[month]===months[8]&&Check>30){
+     setCheck(30)
+    }else if(months[month]===months[1]&&Check>=30&&date.getFullYear()%4==0){
+      setCheck(28)
+    }  else if(months[month]===months[1]&&Check>=30&&date.getFullYear()%4!==0){
+      setCheck(29)
+    }else{
+      setCheck(i.noofDays);
+    }
   };
 
   useEffect(() => {
-    const getData = async () => {
+    (async () => {
       let res = await AsyncStorage.getItem('eventOfDay');
       res = JSON.parse(res);
       setData(res);
-    };
-    getData();
+    })();
   }, [isFocused]);
-  console.log(Data);
+  //console.log(Data)
   emptySpace.push(...box);
 
   const GoToDay = () => {
@@ -152,36 +159,11 @@ const Calender = props => {
                             styles.requriedTxt,
                             {
                               marginLeft: 20,
-                              borderWidth:
-                                el.noofDays === ''
-                                  ? 0
-                                  : Check === el.noofDays
-                                  ? 0.5
-                                  : 0,
-                              backgroundColor:
-                                months[date.getMonth()] === months[month] &&
-                                day === el.noofDays &&
-                                Check === el.noofDays
-                                  ? '#5987f2'
-                                  : 'white',
+                              borderWidth:el.noofDays === ''  ? 0  : Check === el.noofDays  ? 0.5  : 0,
+                              backgroundColor: months[date.getMonth()] === months[month] && day === el.noofDays && Check === el.noofDays   ? '#5987f2': 'white',
                             },
                           ]}>
-                          <Text
-                            style={{
-                              fontFamily: 'Roboto-Regular',
-                              color:
-                                months[date.getMonth()] === months[month] &&
-                                day === el.noofDays &&
-                                Check === el.noofDays
-                                  ? 'white'
-                                  : day === el.noofDays &&
-                                    months[date.getMonth()] === months[month]
-                                  ? 'blue'
-                                  : el.weekNum == 0 || el.weekNum == 6
-                                  ? 'red'
-                                  : 'black',
-                                 fontSize: 16,
-                            }}>
+                          <Text style={{fontFamily: 'Roboto-Regular',color: months[date.getMonth()] === months[month] && day === el.noofDays && Check === el.noofDays   ? 'white': day === el.noofDays &&months[date.getMonth()] === months[month] ? 'blue' : el.weekNum == 0 || el.weekNum == 6 ? 'red': 'black', fontSize: 18,}}>
                             {el.noofDays}
                           </Text>
                         </TouchableOpacity>
@@ -202,7 +184,7 @@ const Calender = props => {
       ) : select === eventsArrange.Day ? (
         <View style={styles.Weeks}>
           <View style={styles.singleDay}>
-            <Text style={styles.dayTxt}>{months[month]===months[1]&&Check>=30&&date.getFullYear()%4==0?28:months[month]===months[1]&&Check>=30&&date.getFullYear()%4!==0?28:months[month]===months[3]||months[month]===months[5]||months[month]===months[10]||months[month]===months[8]&&Check==31?30:Check}</Text>
+            <Text style={styles.dayTxt}>{months[month]===months[1]&&Check>=30&&date.getFullYear()%4==0?29:months[month]===months[1]&&Check>=30&&date.getFullYear()%4!==0?28:months[month]===months[3]||months[month]===months[5]||months[month]===months[10]||months[month]===months[8]&&Check==31?30:Check}</Text>
           </View>
           {Publicholidays.map((el, i) => {
             return (
@@ -212,8 +194,8 @@ const Calender = props => {
                       return (
                         <View key={i} style={styles.eventCards}>
                           <View style={{flexDirection:"row"}} >
-                            {el.date === Check? <Text  style={styles.eventText}>{ el.date}</Text>: el.date !== Check? <Text>{''}</Text>: <Text>{''}</Text>}
-                            {el.date === Check? <Text style={styles.eventText}>{el.des}</Text>: el.date !== Check? <Text>{''}</Text>: <Text style={styles.eventText} >{'No events in this On this Day'}</Text>}
+                            <Text>{el.date === Check? <Text  style={styles.eventText}>{el.date}</Text>: el.date !== Check? <Text>{''}</Text>: <Text>{''}</Text>}</Text>
+                            <Text> {el.date === Check? <Text style={styles.eventText}>{el.des}</Text>: el.date !== Check? <Text>{''}</Text>: <Text style={styles.eventText} >{'No events in this On this Day'}</Text>}</Text>
                           </View>
                         </View>
                       );
@@ -236,7 +218,7 @@ const Calender = props => {
                         return (
                           <View key={i} style={styles.eventCards1}>
                            {el.date == 0
-                                ? 'No events Inthis month'
+                                ? <Text>No events Inthis month</Text>
                                 : 
                                <View style={styles.eventBox} >
                                 <Text style={styles.eventText}>{el.date}{''}</Text>
@@ -269,9 +251,11 @@ const Calender = props => {
                           <Text style={styles.eventsAll}>
                             {el.description}
                           </Text>
+                          <Text>{el.allday?"AllDay":""}</Text>
+                          <Text>{el.thisMonth?"All This Month":""}</Text>
                         </View>
                       </View>
-                    ) : (null)}
+                    ) :<Text>{""}</Text>}
                   </View>
                 );
               })}
@@ -316,9 +300,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   TxtStyles: {
-    fontSize: 16,
+    fontSize: 18,
     color: 'black',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Roboto-Regular',
   },
   monthYearDisplay: {
     flexDirection: 'row',
@@ -511,7 +495,6 @@ const styles = StyleSheet.create({
   },
 
   userEvents: {
-    height: '95%',
     width: '98%',
     alignSelf: 'center',
     borderWidth: 0.5,

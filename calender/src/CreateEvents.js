@@ -33,7 +33,7 @@ const CreateEvents = props => {
       try {
         let res = await AsyncStorage.getItem('eventOfDay');
         res = JSON.parse(res) || [];
-       // await AsyncStorage.clear(res);
+       //await AsyncStorage.clear();
         if (!res) {
           res = await AsyncStorage.setItem(
             'eventOfDay',

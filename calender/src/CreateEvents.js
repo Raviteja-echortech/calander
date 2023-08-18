@@ -26,7 +26,6 @@ const CreateEvents = props => {
     setUserEvents({...userEvents, [key]: text}); 
   };
 
- 
 
   const handleSubmit = async () => {
     if (userEvents.event !== '') {  
